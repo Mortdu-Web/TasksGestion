@@ -1,0 +1,199 @@
+/* ── TASK CARD COMPONENT ── */
+
+:host {
+  display: block;
+}
+
+.task-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--line, #e0d9d0);
+  border-radius: 4px;
+  padding: 14px 18px;
+  transition: border-color 0.2s, box-shadow 0.2s, opacity 0.2s;
+  animation: slideIn 0.25s ease both;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.task-card:hover {
+  border-color: var(--gold, #b89a6a);
+  box-shadow: 0 2px 12px rgba(184,154,106,0.08);
+}
+
+/* Done state */
+.task-card.is-done {
+  opacity: 0.55;
+}
+
+.task-card.is-done .task-name {
+  text-decoration: line-through;
+  color: var(--muted, #7a7168);
+}
+
+/* Checkbox */
+.task-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 1.5px solid var(--line, #e0d9d0);
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.18s, background 0.18s;
+  background: transparent;
+}
+
+.task-checkbox:hover {
+  border-color: var(--gold, #b89a6a);
+}
+
+.task-checkbox:checked {
+  background: var(--accent, #3b3028);
+  border-color: var(--accent, #3b3028);
+}
+
+.task-checkbox:checked::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: 2px solid #f5f2ee;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* Task name */
+.task-name {
+  flex: 1;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text, #1a1714);
+  line-height: 1.4;
+}
+
+/* Group badge */
+.task-group-badge {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold, #b89a6a);
+  background: rgba(184,154,106,0.09);
+  border: 1px solid rgba(184,154,106,0.22);
+  border-radius: 20px;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+
+/* Shared badge */
+.task-shared-badge {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #7a7168);
+  border: 1px solid var(--line, #e0d9d0);
+  border-radius: 20px;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+
+/* Delete button */
+.task-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted, #7a7168);
+  padding: 4px;
+  line-height: 1;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+
+.task-card:hover .task-delete {
+  opacity: 1;
+}
+
+.task-delete:hover {
+  color: #c0392b;
+  background: rgba(192,57,43,0.07);
+}
+
+/* ── MOVE GROUP PANEL ── */
+.task-move {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.task-move-select {
+  padding: 4px 28px 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--bg);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem;
+  color: var(--text);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a7168' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  transition: border-color 0.2s;
+}
+
+.task-move-select:focus { border-color: var(--gold); }
+
+.task-move-confirm,
+.task-move-cancel {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: transparent;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  color: var(--muted);
+}
+
+.task-move-confirm:hover { border-color: var(--gold); color: var(--gold); }
+.task-move-cancel:hover  { border-color: var(--accent); color: var(--accent); }
+
+.task-move-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.task-move-btn:hover { color: var(--gold); background: var(--surface); }

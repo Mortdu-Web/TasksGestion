@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Denis ROBERT — Tâches{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('tasks.static', filename='css/tasks.css') }}"/>
+{% endblock %}
+
+{% block content %}
+
+<div class="tasks-page">
+
+  <!-- ── EN-TÊTE ── -->
+  <div class="tasks-header">
+    <h1 class="tasks-title">Mes tâches</h1>
+    <div class="tasks-header-right">
+      <span class="tasks-count" id="task-count">…</span>
+      <group-manager id="group-manager"></group-manager>
+    </div>
+  </div>
+
+<!-- ── NOUVELLE TÂCHE ── -->
+  <section class="new-task-section">
+    <div class="section-label">Nouvelle tâche</div>
+    <form id="add-task-form" class="new-task-form">
+      <input
+        id="task-title-input"
+        type="text"
+        name="title"
+        placeholder="Titre de la tâche…"
+        autocomplete="off"
+        required
+      >
+      <select id="task-group-select">
+      </select>
+      <button type="submit" class="btn-add">Ajouter</button>
+    </form>
+  </section>
+
+  <!-- ── FILTRES ── -->
+  <section>
+    <div class="section-label">Filtrer</div>
+    <div class="filter-section">
+      <button class="filter-btn active" data-filter="all">Toutes</button>
+      <button class="filter-btn" data-filter="todo">À faire</button>
+      <button class="filter-btn" data-filter="done">Terminées</button>
+      <div class="filter-sep"></div>
+      <select id="filter-group" class="filter-group-select">
+        <option value="">Tous les groupes</option>
+        <!-- options chargées dynamiquement -->
+      </select>
+    </div>
+  </section>
+
+  <!-- ── LISTE DES TÂCHES ── -->
+  <section class="task-list-section">
+    <div class="section-label">Liste</div>
+    <div id="task-list" class="task-list">
+      <p class="task-list-empty">Chargement…</p>
+    </div>
+  </section>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script type="module" src="{{ url_for('tasks.static', filename='js/task.js') }}"></script>
+<script type="module" src="{{ url_for('tasks.static', filename='js/GroupManager.js') }}"></script>
+<script type="module" src="{{ url_for('tasks.static', filename='js/tasks.js') }}"></script>
+{% endblock %}
