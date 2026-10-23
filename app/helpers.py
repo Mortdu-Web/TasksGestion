@@ -12,11 +12,3 @@ else:
             return view
 
         return decorator
-
-
-def tasks_auth():
-    """Décorateur commun à toutes les routes : connexion + rôle Keycloak optionnel (REQUIRED_ROLE).
-
-    Usage : @tasks_auth()
-    """
-    return require_auth(Config.REQUIRED_ROLE) if Config.REQUIRED_ROLE else require_auth()

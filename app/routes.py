@@ -6,13 +6,13 @@ la page (voir static/js/Utils.js), il n'y a donc aucun chemin en dur côté navi
 from flask import Blueprint, jsonify, render_template, request
 
 from . import db, users
-from .helpers import tasks_auth
+from .helpers import require_auth
 
 bp = Blueprint("tasks", __name__, static_folder="static", static_url_path="/static")
 
 
 @bp.route("/")
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def page():
     return render_template("tasks.html")
 
@@ -20,14 +20,14 @@ def page():
 # ── Tâches ───────────────────────────────────────────────────────────────────
 
 @bp.route("/api/tasks", methods=["GET"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def get_tasks():
     """{tasks: [{id, title, is_done, is_shared, group_id, group_name}], groups: [{id, name}]}"""
     return jsonify(db.get_tasks_and_groups(users.current_user_id())), 200
 
 
 @bp.route("/api/tasks", methods=["POST"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def create_task():
     """Corps : {title, group_id?}. Sans group_id, la tâche va dans le premier groupe de l'utilisateur."""
     body = request.get_json(silent=True) or {}
@@ -56,7 +56,7 @@ def create_task():
 
 
 @bp.route("/api/tasks/<int:task_id>/toggle", methods=["POST"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def toggle_task(task_id):
     """Corps : {is_done: bool}"""
     body = request.get_json(silent=True) or {}
@@ -70,7 +70,7 @@ def toggle_task(task_id):
 
 
 @bp.route("/api/tasks/<int:task_id>", methods=["DELETE"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def delete_task(task_id):
     if not db.delete_task(task_id, users.current_user_id()):
         return jsonify({"error": "Tâche introuvable ou accès refusé."}), 403
@@ -78,7 +78,7 @@ def delete_task(task_id):
 
 
 @bp.route("/api/tasks/<int:task_id>/move", methods=["POST"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def move_task(task_id):
     """Corps : {group_id}"""
     body = request.get_json(silent=True) or {}
@@ -95,14 +95,14 @@ def move_task(task_id):
 # ── Groupes ──────────────────────────────────────────────────────────────────
 
 @bp.route("/api/groups", methods=["GET"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def get_groups():
     """{groups: [{id, name, is_received_share, shared_users: [{id, username}]}]}"""
     return jsonify({"groups": db.get_all_accessible_groups(users.current_user_id())}), 200
 
 
 @bp.route("/api/groups", methods=["POST"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def create_group():
     """Corps : {name, color?}. Réponse : {group: {...}} (même forme que GET /api/groups)."""
     body = request.get_json(silent=True) or {}
@@ -116,7 +116,7 @@ def create_group():
 
 
 @bp.route("/api/groups/<int:group_id>", methods=["DELETE"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def delete_group(group_id):
     if not db.delete_group(group_id, users.current_user_id()):
         return jsonify({"error": "Groupe introuvable ou accès refusé."}), 403
@@ -124,7 +124,7 @@ def delete_group(group_id):
 
 
 @bp.route("/api/groups/<int:group_id>/share", methods=["POST"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def share_group(group_id):
     """Corps : {user_id}"""
     body = request.get_json(silent=True) or {}
@@ -139,7 +139,7 @@ def share_group(group_id):
 
 
 @bp.route("/api/groups/<int:group_id>/share/<int:user_id>", methods=["DELETE"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def revoke_share(group_id, user_id):
     if not db.revoke_share(group_id, user_id, users.current_user_id()):
         return jsonify({"error": "Accès refusé."}), 403
@@ -147,7 +147,7 @@ def revoke_share(group_id, user_id):
 
 
 @bp.route("/api/groups/<int:group_id>/leave", methods=["DELETE"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def leave_shared_group(group_id):
     if not db.leave_shared_group(group_id, users.current_user_id()):
         return jsonify({"error": "Partage introuvable."}), 404
@@ -157,7 +157,7 @@ def leave_shared_group(group_id):
 # ── Utilisateurs ─────────────────────────────────────────────────────────────
 
 @bp.route("/api/users", methods=["GET"])
-@tasks_auth()
+@require_auth("admin", "Tasks-Access")
 def get_users():
     """{users: [{id, username}]} : utilisateurs avec qui partager un groupe."""
     return jsonify({"users": users.list_shareable_users()}), 200
