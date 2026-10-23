@@ -16,3 +16,6 @@ input, select, button { font: inherit; }
 
 .topbar { background: var(--surface); border-bottom: 1px solid var(--line); padding: .85rem 1.5rem; }
 .brand { font-family: "Cormorant Garamond", serif; font-size: 1.3rem; font-weight: 600; color: var(--accent); text-decoration: none; }
+.topbar-link { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+.topbar-link:hover { color: var(--accent); }
+.topbar-link::before { content: "←"; margin-right: 8px; }

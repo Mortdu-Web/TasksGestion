@@ -14,7 +14,8 @@ def _bool(name: str, default: bool = False) -> bool:
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-change-me")
-
+    # Lien « Retour au hub » (URL publique de hub-app). Vide = pas de lien.
+    HUB_APP_URL = os.getenv("HUB_APP_URL", "").strip()
     # Route racine derrière le reverse proxy (ex. /tasks). Vide = à la racine.
     URL_PREFIX = os.getenv("URL_PREFIX", "").rstrip("/")
     PUBLIC_URL = os.getenv("PUBLIC_URL", "http://localhost:5000").rstrip("/")
